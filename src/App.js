@@ -9,15 +9,23 @@ function App() {
     const userTodos = localStorage.getItem('todos');
     setTodos(userTodos ? JSON.parse(userTodos) : []);
   }, [])
-
   function addTodo(event) {
-    event.preventDefault();
-    const next = [...todos, todoText.current.value];
-    setTodos(next);
-    localStorage.setItem('todos', JSON.stringify(next));
-    todoText.current.value = '';
+    if (todoText.current.value != '') {
+      event.preventDefault();
+      // todos.unshift(todoText.current.value);
+      todos.push(todoText.current.value);
+      setTodos([...todos]);
+      localStorage.setItem('todos', JSON.stringify([...todos]));
+      todoText.current.value = '';
+    }
   }
+  function removeTodo(index) {
+    todos.splice(index, 1);
+    [...JSON.parse(localStorage.getItem('todos'))].splice(index, 1)
 
+    setTodos([...todos])
+    localStorage.setItem('todos', JSON.stringify([...todos]));
+  }
   return (
     <div style={{ margin: '0 auto' }}>
       <ul>
