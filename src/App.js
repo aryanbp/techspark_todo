@@ -5,6 +5,11 @@ function App() {
   const [todos, setTodos] = useState([]);
   const todoText = useRef();
 
+  useEffect(() => {
+    const userTodos = localStorage.getItem('todos');
+    setTodos(userTodos ? JSON.parse(userTodos) : []);
+  }, [])
+
   function addTodo(event) {
     event.preventDefault();
     const next = [...todos, todoText.current.value];
