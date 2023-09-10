@@ -1,21 +1,10 @@
+import { Box, Container } from '@mui/material';
 import './App.css';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-
-
-import CssBaseline from '@mui/joy/CssBaseline';
-import Button from '@mui/joy/Button';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListSubheader from '@mui/joy/ListSubheader';
-import ListItemButton from '@mui/joy/ListItemButton';
-import { Box } from '@mui/material';
-import { Add, CheckBox, DarkMode, LightMode } from '@mui/icons-material';
-import IconButton from '@mui/joy/IconButton';
-import { Sheet } from '@mui/joy';
+import { Button, CssBaseline, CssVarsProvider, useColorScheme } from '@mui/joy';
+import { useEffect, useState } from 'react';
+import { DarkMode, LightMode } from '@mui/icons-material';
+import TaskList from './TaskList';
 import TaskView from './TaskView';
-
 
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -40,77 +29,20 @@ function ModeToggle() {
   );
 }
 
-
 function App() {
-
-  //SetUp Routes...
-  const navigate = useNavigate();
-
-  const navigateToTaskView = () => {
-    // 👇️ navigate to /
-    navigate('/taskview');
-  };
-
-  const [todos, setTodos] = useState(['Hi', 'Hello']);
-  const todoText = useRef();
-
-  useEffect(() => {
-    const userTodos = localStorage.getItem('todos');
-    setTodos(userTodos ? JSON.parse(userTodos) : []);
-  }, [])
-
-  function removeTodo(index) {
-    todos.splice(index, 1);
-    [...JSON.parse(localStorage.getItem('todos'))].splice(index, 1)
-
-    setTodos([...todos])
-    localStorage.setItem('todos', JSON.stringify([...todos]));
-  }
-
   return (
-    <CssVarsProvider defaultMode="system">
-      <CssBaseline />
-      <main>
-        <ModeToggle />
-        <div>
-          <List
-            variant="outlined"
-            sx={{
-              margin: '0 auto',
-              width: 500,
-              borderRadius: 'sm',
-            }}
-          >
-            <ListItem nested>
-              <ListSubheader sx={{
-                gap: 2
-              }}>Todo List{<IconButton onClick={navigateToTaskView}><Add /></IconButton>}</ListSubheader>
-              <List>
-                {todos.map((todo, index) => (
-                  <ListItem>
-                    <ListItemButton>{todo}</ListItemButton>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Button size="sm" variant="plain" color="neutral">
-                        Edit
-                      </Button>
-                      <Button onClick={() => removeTodo(index)} size="sm" variant="soft" color="danger">
-                        Delete
-                      </Button>
-                    </Box>
-                  </ListItem>
-                ))}
-              </List>
-            </ListItem>
-          </List>
-          <Routes>
-            {/* <Route path="/tasklist" element={<Contacts />} /> */}
-            <Route path="/taskview" element={<TaskView />} />
-          </Routes>
-        </div>
-      </main>
-    </CssVarsProvider>
+    <Container>
+      <CssVarsProvider defaultMode='system'>
+        <CssBaseline />
+        <main>
+          <ModeToggle />
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <TaskList />
+          </Box>
+        </main>
+      </CssVarsProvider>
+    </Container>
   );
-
   // //SetUp Routes...
   // const navigate = useNavigate();
 
