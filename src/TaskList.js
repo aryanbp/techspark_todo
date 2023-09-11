@@ -8,7 +8,7 @@ import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemButton from '@mui/joy/ListItemButton';
 import { Box } from '@mui/material';
 import IconButton from '@mui/joy/IconButton';
-import { Add, ExpandMoreOutlined } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Checkbox from '@mui/joy/Checkbox';
 import { Modal, ModalClose, Sheet, Typography } from '@mui/joy';
@@ -18,8 +18,9 @@ function TaskList() {
     const [todos, setTodos] = useState([]);
     const [check, setCheck] = useState([]);
     const [open, setOpen] = useState(false);
-    const dues = useRef([]);
-    const desc = useRef([]);
+    const [dues, setDues] = useState([]);
+    const [desc, setDesc] = useState([]);
+    const i = useRef();
 
     useEffect(() => {
         const userTodos = localStorage.getItem('todos');
@@ -28,8 +29,8 @@ function TaskList() {
         const userDates = localStorage.getItem('dates');
         setCheck(userCheck ? JSON.parse(userCheck) : []);
         setTodos(userTodos ? JSON.parse(userTodos) : []);
-        dues.value = (userDates ? JSON.parse(userDates) : []);
-        desc.value = (userDescription ? JSON.parse(userDescription) : []);
+        setDues(userDates ? JSON.parse(userDates) : []);
+        setDesc(userDescription ? JSON.parse(userDescription) : []);
     }, [])
 
     function removeTodo(index) {
@@ -37,17 +38,32 @@ function TaskList() {
         [...JSON.parse(localStorage.getItem('todos'))].splice(index, 1);
         check.splice(index, 1);
         [...JSON.parse(localStorage.getItem('check'))].splice(index, 1);
-        // (dues.value).splice(index, 1);
-        console.log(dues);
+
+
+        dues.splice(index, 1);
         [...JSON.parse(localStorage.getItem('dates'))].splice(index, 1);
+        desc.splice(index, 1);
+        [...JSON.parse(localStorage.getItem('description'))].splice(index, 1);
 
         setTodos([...todos])
         localStorage.setItem('todos', JSON.stringify([...todos]));
         setCheck([...check]);
         localStorage.setItem('check', JSON.stringify([...check]));
-        // localStorage.setItem('dates', JSON.stringify([...dues]));
+
+        setTodos([...dues])
+        localStorage.setItem('dates', JSON.stringify([...dues]));
+        setTodos([...desc])
+        localStorage.setItem('description', JSON.stringify([...desc]));
     }
 
+    function val() {
+        if (dues[i.value] != '') {
+            return (todos[i.value] + ': Due at ' + dues[i.value]);
+        }
+        else {
+            return (todos[i.value]);
+        }
+    }
     return (
         <div>
 
@@ -68,7 +84,7 @@ function TaskList() {
                     }}>Todo List{<IconButton><Link to='/taskview'><Add /></Link></IconButton>}</ListSubheader>
                     <List>
                         {todos.map((todo, index) => (
-                            <ListItem sx={{ gap: 2 }}>
+                            <ListItem key={index} sx={{ gap: 2 }}>
                                 <Checkbox sx={{ marginTop: '6px' }} color="primary" checked={check[index]} onChange={() => {
                                     check[index] = (!check[index]);
                                     setCheck([...check])
@@ -76,13 +92,13 @@ function TaskList() {
                                 }} />
                                 <ListItemButton onClick={() => {
                                     setOpen(true);
-                                    console.log(dues);
+                                    i.value = index;
                                 }} sx={{ gap: 2 }}>
                                     {todo}
                                 </ListItemButton>
                                 <Modal
                                     open={open}
-                                    onClose={() => setOpen(false)}
+                                    onClose={() => { setOpen(false); }}
                                     sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <Sheet
                                         variant="outlined"
@@ -111,10 +127,10 @@ function TaskList() {
                                             fontWeight="lg"
                                             mb={1}
                                         >
-                                            Due at {(dues.value)[index]}
+                                            {val()}
                                         </Typography>
                                         <Typography id="modal-desc" textColor="text.tertiary">
-                                            {(desc.value)[index]}
+                                            {desc[i.value]}
                                         </Typography>
                                     </Sheet>
                                 </Modal>

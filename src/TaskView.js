@@ -1,7 +1,7 @@
 import { DarkMode, LightMode } from '@mui/icons-material';
 import { Box, Button, CssBaseline, CssVarsProvider, FormControl, FormLabel, Input, List, ListItem, ListItemContent, Textarea, useColorScheme } from '@mui/joy';
 import { Container } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -99,7 +99,7 @@ function TaskView() {
 
                         <form onSubmit={addTodo} >
                             <FormControl sx={{ gap: 2 }}>
-                                <FormLabel>Todo</FormLabel>
+                                <FormLabel>Todo{index >= 0 ? '/Edit' : ''}</FormLabel>
                                 <Input value={todoText} placeholder='Task to do...' onChange={(event) => { setTodoText(event.currentTarget.value) }} required />
                             </FormControl>
                             <FormControl sx={{ gap: 2 }}>
