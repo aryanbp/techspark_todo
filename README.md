@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 After cloning the repository run:
 
-## `npm i`
+### `npm i`
 
 This will download all the packages needed to run this project.
 
